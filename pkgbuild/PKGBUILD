@@ -1,14 +1,14 @@
 # Maintainer: Barnabé di Kartola <barnabedikartola@gmail.com>
 
-pkgname=biglinux-package-template
-pkgdesc="Package template for biglinux"
+pkgname=noto-nerd-fonts-lite
+pkgdesc="Google Noto TTF fonts (nerd lite version)"
 # depends=('')
 # makedepends=('')
 # conflicts=('')
 pkgver=$(date +%y.%m.%d)
 pkgrel=$(date +%H%M)
 arch=('any')
-license=('GPL3')
+license=('Apache-2.0')
 url="https://github.com/biglinux/$pkgname"
 provides=("$pkgname")
 source=("git+${url}.git")

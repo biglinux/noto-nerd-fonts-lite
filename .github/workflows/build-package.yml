@@ -11,6 +11,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            fontforge \
+            wget
+          mkdir fontpatcher
+          cd fontpatcher
+          wget -c https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FontPatcher.zip
+          unzip FontPatcher.zip
+      
+      - name: Patch Fonts
+        shell: bash
+        run: |
+          for i in $(ls fonts/); do
+            fontforge --script fontpatcher/font-patcher --complete fonts --outputdir usr/share/fonts/noto/
+          done
+      
+      - name: Update github
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          rm -r fontpatcher
+          git add --all
+          if [ -n "$(git commit -m "update $(date +%y-%m-%d_%H:%M)" -a | grep "nothing to commit")" ];then exit 0; fi
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+      
       - name: Send Hooks BigLinux Build Package
         shell: bash
         run: |
