@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           for i in $(ls fonts/); do
-            fontforge --script fontpatcher/font-patcher --complete fonts --outputdir usr/share/fonts/noto/
+            fontforge --script fontpatcher/font-patcher --complete fonts/$i --outputdir usr/share/fonts/noto/
           done
       
       - name: Update github
