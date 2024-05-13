@@ -30,7 +30,7 @@ jobs:
           test ! -d usr/share/fonts/noto-nerd/ && mkdir -p usr/share/fonts/noto-nerd/
           # # Only Sans
           for i in $(ls fonts/NotoSans*); do
-            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name "NotoSanf Nerd Font-$(awk -F'[-.]' '{print $2}' <<< $i)"
+            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name "NotoSans Nerd Font-$(awk -F'[-.]' '{print $2}' <<< $i)"
           done
           
           # Only Serif
