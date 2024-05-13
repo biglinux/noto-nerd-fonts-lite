@@ -28,13 +28,18 @@ jobs:
         shell: bash
         run: |
           test ! -d usr/share/fonts/noto-nerd/ && mkdir -p usr/share/fonts/noto-nerd/
-          # Only Sans
-          for i in $(ls fonts/NotoSans*); do
-            fontforge --script fontpatcher/font-patcher --complete --quiet fonts/$i --outputdir usr/share/fonts/noto-nerd/
-          done
+          # # Only Sans
+          # for i in $(ls fonts/NotoSans*); do
+          #   fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/
+          # done
+          
+          # # Only Serif
+          # for i in $(ls fonts/NotoSerif*); do
+          #   fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/
+          # done
           
           # Only mono
-          for i in $(ls fonts/NotoMono*); do
+          for i in $(ls fonts/NotoSansMono*); do
             fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name NotoMono Nerd Font-$(awk -F'[-.]' '{print $2}' <<< $i)
           done
       
