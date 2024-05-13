@@ -33,7 +33,7 @@ jobs:
           
           # Only mono
           for i in $(ls fonts/NotoMono*); do
-            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto/
+            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto/ --name NotoMono-$(awk -F'[-.]' '{print $2}' <<< $i)
           done
       
       - name: Update github
