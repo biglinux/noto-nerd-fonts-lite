@@ -12,26 +12,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      # - name: Install Dependencies
-      #   shell: bash
-      #   run: |
-      #     sudo apt update
-      #     sudo apt install -y \
-      #       fontforge \
-      #       wget
-      #     mkdir fontpatcher
-      #     cd fontpatcher
-      #     wget -c https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FontPatcher.zip
-      #     unzip FontPatcher.zip
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            fontforge \
+            wget
+          mkdir fontpatcher
+          cd fontpatcher
+          wget -c https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FontPatcher.zip
+          unzip FontPatcher.zip
       
-      # - name: Patch Fonts
-      #   shell: bash
-      #   run: |
-      #     test ! -d usr/share/fonts/noto-nerd/ && mkdir -p usr/share/fonts/noto-nerd/
-      #     # # Only Sans
-      #     for i in $(ls fonts/NotoSans*); do
-      #       fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name "NotoSans Nerd Font-$(awk -F'[-.]' '{print $2}' <<< $i)"
-      #     done
+      - name: Patch Fonts
+        shell: bash
+        run: |
+          test ! -d usr/share/fonts/noto-nerd/ && mkdir -p usr/share/fonts/noto-nerd/
+          # # Only Sans
+          for i in $(ls fonts/NotoSans*); do
+            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name "NotoSans Nerd Font-$(awk -F'[-.]' '{print $2}' <<< $i)"
+          done
           
           # # Only Serif
           # for i in $(ls fonts/NotoSerif*); do
@@ -39,23 +39,23 @@ jobs:
           # done
           
           # # Only mono
-          # for i in $(ls fonts/NotoSansMono*); do
+          # for i in $(ls fonts/NotoMono*); do
           #   fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name "NotoMono Nerd Font-$(awk -F'[-.]' '{print $2}' <<< $i)"
           # done
       
-      # - name: Update github
-      #   run: |
-      #     git config --local user.email "github-actions[bot]@users.noreply.github.com"
-      #     git config --local user.name "github-actions[bot]"
-      #     rm -r fontpatcher
-      #     git add --all
-      #     if [ -n "$(git commit -m "update $(date +%y-%m-%d_%H:%M)" -a | grep "nothing to commit")" ];then exit 0; fi
+      - name: Update github
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          rm -r fontpatcher
+          git add --all
+          if [ -n "$(git commit -m "update $(date +%y-%m-%d_%H:%M)" -a | grep "nothing to commit")" ];then exit 0; fi
 
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ github.ref }}
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
       
       - name: Send Hooks BigLinux Build Package
         shell: bash
