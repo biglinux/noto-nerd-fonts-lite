@@ -3,8 +3,8 @@ name: Build Package
 on:
   workflow_dispatch:
 
-  push:
-    branches: [ "*" ]
+  # push:
+  #   branches: [ "*" ]
 
 jobs:
   build:
@@ -28,12 +28,12 @@ jobs:
         shell: bash
         run: |
           # for i in $(ls fonts/); do
-          #   fontforge --script fontpatcher/font-patcher --complete --quiet fonts/$i --outputdir usr/share/fonts/noto/
+          #   fontforge --script fontpatcher/font-patcher --complete --quiet fonts/$i --outputdir usr/share/fonts/noto-nerd/
           # done
           
           # Only mono
           for i in $(ls fonts/NotoMono*); do
-            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto/ --name NotoMono-$(awk -F'[-.]' '{print $2}' <<< $i)
+            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name NotoMono-$(awk -F'[-.]' '{print $2}' <<< $i)
           done
       
       - name: Update github
