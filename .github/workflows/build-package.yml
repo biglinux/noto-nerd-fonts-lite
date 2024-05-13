@@ -40,7 +40,8 @@ jobs:
           
           # Only mono
           for i in $(ls fonts/NotoSansMono*); do
-            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name "NotoMono Nerd Font-$(awk -F'[-.]' '{print $2}' <<< $i)"
+            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name "NotoMono Nerd Font"
+            #-$(awk -F'[-.]' '{print $2}' <<< $i)
           done
       
       - name: Update github
