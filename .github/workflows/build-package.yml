@@ -3,8 +3,8 @@ name: Build Package
 on:
   workflow_dispatch:
 
-  # push:
-  #   branches: [ "*" ]
+  push:
+    branches: [ "*" ]
 
 jobs:
   build:
@@ -27,13 +27,15 @@ jobs:
       - name: Patch Fonts
         shell: bash
         run: |
-          # for i in $(ls fonts/); do
-          #   fontforge --script fontpatcher/font-patcher --complete --quiet fonts/$i --outputdir usr/share/fonts/noto-nerd/
-          # done
+          test ! -d usr/share/fonts/noto-nerd/ && mkdir -p usr/share/fonts/noto-nerd/
+          # Only Sans
+          for i in $(ls fonts/NotoSans*); do
+            fontforge --script fontpatcher/font-patcher --complete --quiet fonts/$i --outputdir usr/share/fonts/noto-nerd/
+          done
           
           # Only mono
           for i in $(ls fonts/NotoMono*); do
-            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name NotoMono-$(awk -F'[-.]' '{print $2}' <<< $i)
+            fontforge --script fontpatcher/font-patcher --complete --quiet $i --outputdir usr/share/fonts/noto-nerd/ --name NotoMono Nerd Font-$(awk -F'[-.]' '{print $2}' <<< $i)
           done
       
       - name: Update github
