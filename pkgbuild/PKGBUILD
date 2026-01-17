@@ -1,6 +1,6 @@
 pkgname=noto-nerd-fonts-lite
 pkgver=3.4.0
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="Google Noto TTF fonts (nerd lite version)"
 arch=('any')
@@ -9,8 +9,12 @@ url="https://github.com/ryanoasis/nerd-fonts"
 conflicts=('noto-fonts-sans-nerd')
 provides=("$pkgname")
 makedepends=('python-fonttools')
-source=("https://github.com/ryanoasis/nerd-fonts/releases/download/v${pkgver}/Noto.tar.xz")
-sha256sums=('e28b31609d17fc50bdf9e6730c947a61b0e474af726c2c044c39bc78fcd9bfde')
+source=("https://github.com/ryanoasis/nerd-fonts/releases/download/v${pkgver}/Noto.tar.xz"
+        "81-noto-mono-nerd-spacing.conf"
+        "82-noto-nerd-medium.conf")
+sha256sums=('e28b31609d17fc50bdf9e6730c947a61b0e474af726c2c044c39bc78fcd9bfde'
+            'b17b293321608cc6a44d82fc655afd580ce3cb41df2be2831a27cb3696e4c2a2'
+            '5b6adabac25631e35a343a88e9fadbb62f082cd7ed87a36bf34005d163712230')
 install="${pkgname}.install"
 
 prepare() {
@@ -50,11 +54,6 @@ package() {
 
     # Install configuration files
     install -d "${pkgdir}/etc/fonts/conf.d"
-    
-    if [ -d "${startdir}/../etc/fonts/conf.d" ]; then
-        install -m644 "${startdir}/../etc/fonts/conf.d/81-noto-mono-nerd-spacing.conf" "${pkgdir}/etc/fonts/conf.d/"
-        install -m644 "${startdir}/../etc/fonts/conf.d/82-noto-nerd-medium.conf" "${pkgdir}/etc/fonts/conf.d/"
-    else
-        echo "Warning: Config files not found in ${startdir}/../etc/fonts/conf.d"
-    fi
+    install -m644 "81-noto-mono-nerd-spacing.conf" "${pkgdir}/etc/fonts/conf.d/"
+    install -m644 "82-noto-nerd-medium.conf" "${pkgdir}/etc/fonts/conf.d/"
 }
