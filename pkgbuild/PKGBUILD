@@ -2,34 +2,42 @@
 
 pkgname=noto-nerd-fonts-lite
 pkgver=3.4.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Google Noto TTF fonts (nerd lite version)"
 arch=('any')
 license=('Apache-2.0')
 url="https://github.com/ryanoasis/nerd-fonts"
 conflicts=('noto-fonts-sans-nerd')
 provides=("$pkgname")
+makedepends=('python-fonttools')
 source=("https://github.com/ryanoasis/nerd-fonts/releases/download/v${pkgver}/Noto.tar.xz")
 sha256sums=('e28b31609d17fc50bdf9e6730c947a61b0e474af726c2c044c39bc78fcd9bfde')
 install="${pkgname}.install"
+
+prepare() {
+    cd "$srcdir"
+    msg2 "Patching font family names to restore legacy spacing..."
+    # Patch NotoSansM (Mono with weights) -> "Noto Mono Nerd Font"
+    find . -name "NotoSansMNerdFont-*.ttf" -exec python "${startdir}/pkgbuild/rename_fonts.py" {} +
+    
+    # Patch NotoSans (Proportional) -> "Noto Sans Nerd Font"
+    find . -name "NotoSansNerdFont-*.ttf" -exec python "${startdir}/pkgbuild/rename_fonts.py" {} +
+}
 
 package() {
     cd "$srcdir"
     
     install -d "${pkgdir}/usr/share/fonts/noto-nerd"
     
-    # Install Noto Mono Nerd Font (Legacy Noto Mono - Only Regular exists in upstream)
-    find . -name "NotoMonoNerdFont-Regular.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
-
-    # Install Noto Sans Mono Nerd Font (Replaces NotoMono with weights)
-    # Mapping user's NotoMono requests to NotoSansM (Mono) variants
+    # Install Noto Sans Mono Nerd Font (Now renamed to "Noto Mono Nerd Font")
+    # This provides the complete family with weights for "Noto Mono"
     find . -name "NotoSansMNerdFont-Bold.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
     find . -name "NotoSansMNerdFont-Light.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
     find . -name "NotoSansMNerdFont-Medium.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
     find . -name "NotoSansMNerdFont-Regular.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
     find . -name "NotoSansMNerdFont-Thin.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
 
-    # Install Noto Sans Nerd Font variants (Proportional)
+    # Install Noto Sans Nerd Font (Now renamed to "Noto Sans Nerd Font")
     find . -name "NotoSansNerdFont-BoldItalic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
     find . -name "NotoSansNerdFont-Bold.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
     find . -name "NotoSansNerdFont-Italic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
