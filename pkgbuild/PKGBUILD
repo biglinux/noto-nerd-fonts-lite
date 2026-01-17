@@ -2,7 +2,7 @@
 
 pkgname=noto-nerd-fonts-lite
 pkgver=3.4.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Google Noto TTF fonts (nerd lite version)"
 arch=('any')
 license=('Apache-2.0')
@@ -11,20 +11,25 @@ conflicts=('noto-fonts-sans-nerd')
 provides=("$pkgname")
 source=("https://github.com/ryanoasis/nerd-fonts/releases/download/v${pkgver}/Noto.tar.xz")
 sha256sums=('e28b31609d17fc50bdf9e6730c947a61b0e474af726c2c044c39bc78fcd9bfde')
+install="${pkgname}.install"
 
 package() {
     cd "$srcdir"
     
     install -d "${pkgdir}/usr/share/fonts/noto-nerd"
     
-    # Install Noto Mono Nerd Font variants
-    find . -name "NotoMonoNerdFont-Bold.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
-    find . -name "NotoMonoNerdFont-Light.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
-    find . -name "NotoMonoNerdFont-Medium.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    # Install Noto Mono Nerd Font (Legacy Noto Mono - Only Regular exists in upstream)
     find . -name "NotoMonoNerdFont-Regular.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
-    find . -name "NotoMonoNerdFont-Thin.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
-    
-    # Install Noto Sans Nerd Font variants
+
+    # Install Noto Sans Mono Nerd Font (Replaces NotoMono with weights)
+    # Mapping user's NotoMono requests to NotoSansM (Mono) variants
+    find . -name "NotoSansMNerdFont-Bold.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansMNerdFont-Light.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansMNerdFont-Medium.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansMNerdFont-Regular.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansMNerdFont-Thin.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+
+    # Install Noto Sans Nerd Font variants (Proportional)
     find . -name "NotoSansNerdFont-BoldItalic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
     find . -name "NotoSansNerdFont-Bold.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
     find . -name "NotoSansNerdFont-Italic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
@@ -39,8 +44,6 @@ package() {
     # Install configuration files
     install -d "${pkgdir}/etc/fonts/conf.d"
     
-    # Look for config files in the project root relative to where PKGBUILD typically lives
-    # Assuming PKGBUILD is in pkgbuild/ and config is in etc/fonts/conf.d/
     if [ -d "${startdir}/../etc/fonts/conf.d" ]; then
         install -m644 "${startdir}/../etc/fonts/conf.d/81-noto-mono-nerd-spacing.conf" "${pkgdir}/etc/fonts/conf.d/"
         install -m644 "${startdir}/../etc/fonts/conf.d/82-noto-nerd-medium.conf" "${pkgdir}/etc/fonts/conf.d/"
