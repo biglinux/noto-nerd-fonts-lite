@@ -1,8 +1,7 @@
-# Maintainer: Barnabé di Kartola <barnabedikartola@gmail.com>
-
 pkgname=noto-nerd-fonts-lite
 pkgver=3.4.0
-pkgrel=3
+pkgrel=1
+epoch=1
 pkgdesc="Google Noto TTF fonts (nerd lite version)"
 arch=('any')
 license=('Apache-2.0')
