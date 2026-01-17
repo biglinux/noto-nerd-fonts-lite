@@ -18,10 +18,10 @@ prepare() {
     cd "$srcdir"
     msg2 "Patching font family names to restore legacy spacing..."
     # Patch NotoSansM (Mono with weights) -> "Noto Mono Nerd Font"
-    find . -name "NotoSansMNerdFont-*.ttf" -exec python "${startdir}/pkgbuild/rename_fonts.py" {} +
+    find . -name "NotoSansMNerdFont-*.ttf" -exec python "${startdir}/rename_fonts.py" {} +
     
     # Patch NotoSans (Proportional) -> "Noto Sans Nerd Font"
-    find . -name "NotoSansNerdFont-*.ttf" -exec python "${startdir}/pkgbuild/rename_fonts.py" {} +
+    find . -name "NotoSansNerdFont-*.ttf" -exec python "${startdir}/rename_fonts.py" {} +
 }
 
 package() {
