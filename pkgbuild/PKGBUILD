@@ -1,42 +1,50 @@
 # Maintainer: Barnabé di Kartola <barnabedikartola@gmail.com>
 
 pkgname=noto-nerd-fonts-lite
+pkgver=3.4.0
+pkgrel=1
 pkgdesc="Google Noto TTF fonts (nerd lite version)"
-# depends=('')
-# makedepends=('')
-conflicts=('noto-fonts-sans-nerd')
-pkgver=$(date +%y.%m.%d)
-pkgrel=$(date +%H%M)
 arch=('any')
 license=('Apache-2.0')
-url="https://github.com/biglinux/$pkgname"
+url="https://github.com/ryanoasis/nerd-fonts"
+conflicts=('noto-fonts-sans-nerd')
 provides=("$pkgname")
-source=("git+${url}.git")
-md5sums=('SKIP')
-if [ -e "${pkgname}.install" ];then
-    install=${pkgname}.install
-elif [ -e "pkgbuild.install" ];then
-    install=pkgbuild.install
-fi
+source=("https://github.com/ryanoasis/nerd-fonts/releases/download/v${pkgver}/Noto.tar.xz")
+sha256sums=('e28b31609d17fc50bdf9e6730c947a61b0e474af726c2c044c39bc78fcd9bfde')
 
 package() {
-    # Verify default folder
-    if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
-        InternalDir="${srcdir}/${pkgname}/${pkgname}"
+    cd "$srcdir"
+    
+    install -d "${pkgdir}/usr/share/fonts/noto-nerd"
+    
+    # Install Noto Mono Nerd Font variants
+    find . -name "NotoMonoNerdFont-Bold.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoMonoNerdFont-Light.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoMonoNerdFont-Medium.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoMonoNerdFont-Regular.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoMonoNerdFont-Thin.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    
+    # Install Noto Sans Nerd Font variants
+    find . -name "NotoSansNerdFont-BoldItalic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-Bold.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-Italic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-LightItalic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-Light.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-MediumItalic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-Medium.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-Regular.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-ThinItalic.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+    find . -name "NotoSansNerdFont-Thin.ttf" -exec install -m644 {} "${pkgdir}/usr/share/fonts/noto-nerd/" \;
+
+    # Install configuration files
+    install -d "${pkgdir}/etc/fonts/conf.d"
+    
+    # Look for config files in the project root relative to where PKGBUILD typically lives
+    # Assuming PKGBUILD is in pkgbuild/ and config is in etc/fonts/conf.d/
+    if [ -d "${startdir}/../etc/fonts/conf.d" ]; then
+        install -m644 "${startdir}/../etc/fonts/conf.d/81-noto-mono-nerd-spacing.conf" "${pkgdir}/etc/fonts/conf.d/"
+        install -m644 "${startdir}/../etc/fonts/conf.d/82-noto-nerd-medium.conf" "${pkgdir}/etc/fonts/conf.d/"
     else
-        InternalDir="${srcdir}/${pkgname}"
-    fi
-
-    # Copy files
-    if [ -d "${InternalDir}/usr" ]; then
-        cp -r "${InternalDir}/usr" "${pkgdir}/"
-    fi
-
-    if [ -d "${InternalDir}/etc" ]; then
-        cp -r "${InternalDir}/etc" "${pkgdir}/"
-    fi
-
-    if [ -d "${InternalDir}/opt" ]; then
-        cp -r "${InternalDir}/opt" "${pkgdir}/"
+        echo "Warning: Config files not found in ${startdir}/../etc/fonts/conf.d"
     fi
 }
